@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,8 +16,7 @@ import springbootalfresco.demo.model.reader.ReaderCreateDTO;
 import java.util.Objects;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static springbootalfresco.demo.constants.ApplicationConstants.*;
 
 @RunWith(SpringRunner.class)
@@ -26,12 +26,13 @@ public class AlfrescoTest {
     @Autowired
     private Environment environment;
     private ObjectMapper objectMapper = new ObjectMapper();
+    private ExpectedException expectedException = ExpectedException.none();
 
     @Test
-    public void testAlfrescoStream() {
+    public void getAlfrescoStreamPositiveTest() {
         //GIVEN
         Response stringStreamResponse = null;
-        ReaderCreateDTO readerCreateDTO = new ReaderCreateDTO(1, 25);
+        ReaderCreateDTO readerCreateDTO = new ReaderCreateDTO("1", "25");
         //WHEN
         try {
             stringStreamResponse = getStringStream(readerCreateDTO);
@@ -46,6 +47,24 @@ public class AlfrescoTest {
         assertTrue(string.contains(FIZZ));
         assertTrue(string.contains(BUZZ));
         assertTrue(string.contains(FIZZBUZZ));
+    }
+
+    @Test
+    public void getAlfrescoStreamNegativeTest() {
+        //GIVEN
+        Response stringStreamResponse = null;
+        ReaderCreateDTO readerCreateDTO = new ReaderCreateDTO("1", "ten");
+        //WHEN
+        try {
+            stringStreamResponse = getStringStream(readerCreateDTO);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        expectedException.expect(NumberFormatException.class);
+        //THEN
+        assertNotNull(stringStreamResponse);
+        String string = stringStreamResponse.jsonPath().getString("object");
+        assertNull(string);
     }
 
     private Response getStringStream(ReaderCreateDTO readerCreateDTO) throws JsonProcessingException {

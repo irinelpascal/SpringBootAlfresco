@@ -5,29 +5,29 @@ import io.swagger.annotations.ApiModelProperty;
 public class ReaderCreateDTO {
 
     @ApiModelProperty(required = true)
-    private int minimumRange;
+    private String minimumRange;
 
     @ApiModelProperty(required = true)
-    private int maximumRange;
+    private String maximumRange;
 
-    public ReaderCreateDTO(int minimumRange, int maximumRange) {
+    public ReaderCreateDTO(String minimumRange, String maximumRange) {
         this.minimumRange = minimumRange;
         this.maximumRange = maximumRange;
     }
 
-    public int getMinimumRange() {
+    public String getMinimumRange() {
         return minimumRange;
     }
 
-    public void setMinimumRange(int minimumRange) {
+    public void setMinimumRange(String minimumRange) {
         this.minimumRange = minimumRange;
     }
 
-    public int getMaximumRange() {
+    public String getMaximumRange() {
         return maximumRange;
     }
 
-    public void setMaximumRange(int maximumRange) {
+    public void setMaximumRange(String maximumRange) {
         this.maximumRange = maximumRange;
     }
 }

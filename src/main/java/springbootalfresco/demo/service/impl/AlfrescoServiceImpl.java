@@ -20,13 +20,17 @@ public class AlfrescoServiceImpl implements AlfrescoService {
 
     @Override
     public String getMalformedStream(ReaderCreateDTO readerCreateDTO) {
-        int minimumRange = readerCreateDTO.getMinimumRange();
-        int maximumRange = readerCreateDTO.getMaximumRange();
-        checkValidityOnRange(minimumRange, maximumRange);
+        String minimumRange = readerCreateDTO.getMinimumRange();
+        String maximumRange = readerCreateDTO.getMaximumRange();
+        try {
+            checkValidityOnRange(Integer.parseInt(minimumRange), Integer.parseInt(maximumRange));
+        } catch (NumberFormatException e) {
+           LOG.severe("Try to insert a proper integer number \n" + e.getMessage());
+        }
         List<Integer> integers = new ArrayList<>();
         List<String> strings = new ArrayList<>();
 
-        for (int i = minimumRange; i <= maximumRange; i++) {
+        for (int i = Integer.parseInt(minimumRange); i <= Integer.parseInt(maximumRange); i++) {
             integers.add(i);
         }
         convertIntegersAndAddToList(integers, strings);
