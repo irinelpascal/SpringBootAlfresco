@@ -7,11 +7,9 @@ import javax.validation.constraints.NotBlank;
 public class ReaderCreateDTO {
 
     @ApiModelProperty(required = true)
-    @NotBlank(message = "Please add a minimum range number")
     private String minimumRange;
 
     @ApiModelProperty(required = true)
-    @NotBlank(message = "Please add a maximum range number")
     private String maximumRange;
 
     public ReaderCreateDTO(String minimumRange, String maximumRange) {

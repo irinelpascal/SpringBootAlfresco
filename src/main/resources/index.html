@@ -1,63 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <form id="myForm" method="POST">
-      <input type="number" name="min" /><br />
-      <input type="number" name="max" /><br />
-      <input type="submit" value="Send Request" /><br />
-    </form>
-    <div id="response"></div>
+<body>
+		  <label for="minimumValue">First name:</label>
+		  <input type="text" id="minimumValue" name="fname"><br><br>
+		  <label for="maximumValue">Last name:</label>
+		  <input type="text" id="maximumValue" name="maximumValue"><br><br>
+		  <button onclick="UserAction()">Send Request</button>
 
-    <script>
-      window.addEventListener("load", function () {
-        function sendData() {
-          const XHR = new XMLHttpRequest();
+		  <div id="response"></div>
+<script>
+    function UserAction() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "http://127.0.0.1:8443/api/stream/toString", true);
+		xhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
 
-          // Bind the FormData object and the form element
-          const FD = new FormData(form);
+      	xhttp.onload = function () {
+			if (xhttp.readyState == 4 && xhttp.status == "200") {
+				console.log(xhttp.responseText);
+				document.getElementById("response").innerHTML = xhttp.responseText;
+			} else {
+				// console.error(users);
+				console.log(xhttp.responseText);
+			}
+		}
+		const firstName = document.getElementById("minimumValue").value;
+		const lastName = document.getElementById("maximumValue").value;
 
-          // Define what happens on successful data submission
-          XHR.addEventListener("load", function (event) {
-            alert(event.target.responseText);
-          });
+		const json = {};
+		json['minimumRange'] = firstName;
+		json['maximumRange'] = lastName;
 
-          // Define what happens in case of error
-          XHR.addEventListener("error", function (event) {
-            alert("Oops! Something went wrong.");
-          });
-
-          // Set up our request
-          XHR.open("POST", "http://127.0.0.1:8443/api/stream/toString");
-
-          // The data sent is what the user provided in the form
-          XHR.send(FD);
-        }
-
-        // Access the form element...
-        let form = document.getElementById("myForm");
-
-        // ...and take over its submit event.
-        form.addEventListener("submit", function (event) {
-          event.preventDefault();
-
-          sendData();
-        });
-      });
-
-    //   var input = document.querySelector('input[type="submit"]');
-    //   function userAction(data) {
-    //     var xhttp = new XMLHttpRequest();
-    //     console.log(data);
-    //     xhttp.onreadystatechange = function () {
-    //       if (this.readyState == 4 && this.status == 200) {
-    //         alert(this.responseText);
-    //       }
-    //     };
-    //     xhttp.open("POST", "http://127.0.0.1:8443/api/stream/toString", true);
-    //     xhttp.setRequestHeader("Content-type", "application/json");
-    //     xhttp.send("Your JSON Data Here");
-    //   }
-    //   input.addEventListener("submit", userAction);
-    </script>
-  </body>
+		xhttp.send(JSON.stringify(json));
+		console.log('sent');
+    }
+</script>
+</body>
 </html>
