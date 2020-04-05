@@ -25,7 +25,7 @@ public class AlfrescoController {
     @PostMapping(value = "/api/stream/toString",
                     consumes = MediaType.APPLICATION_JSON_VALUE,
                     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseMessage getMalformedStream(@RequestParam @Valid ReaderCreateDTO readerCreateDTO) {
+    public ResponseMessage getMalformedStream(@RequestBody @Valid ReaderCreateDTO readerCreateDTO) {
         String streamToString = alfrescoService.getMalformedStream(readerCreateDTO);
         return new ResponseMessage(streamToString);
     }
